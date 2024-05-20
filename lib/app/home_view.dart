@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_akhir/app/login_view.dart';
 import 'package:flutter_application_akhir/common/color_common.dart';
 import 'package:flutter_application_akhir/widget/round_button.dart'; // Adjust the import path if necessary
 
@@ -56,15 +57,20 @@ class _HomeBoardingState extends State<HomeBoarding> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0),
+                  padding: const EdgeInsets.only(bottom: 30),
                   child: RoundButton(
                     title: "Get Started",
                     type: RoundButtonType.bgGradient,
                     onPressed: () {
-                      // Define the action for the button here
+                     if(isChangeColor) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginView()));
+                     } else {
+                      isChangeColor = true;
+                     }
                     },
                   ),
                 ),
+                const SizedBox(height: 32,)
               ],
             )
           ],

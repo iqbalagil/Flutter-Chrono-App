@@ -22,7 +22,7 @@ return Container(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           if (type == RoundButtonType.bgGradient || type == RoundButtonType.bgSGradient)
             BoxShadow(
@@ -36,7 +36,7 @@ return Container(
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
           textStyle: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
           backgroundColor: Colors.transparent,
           elevation: 0,

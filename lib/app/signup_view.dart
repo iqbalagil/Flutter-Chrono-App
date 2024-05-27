@@ -60,7 +60,7 @@ class _SignUpViewState extends State<SignUpView> {
                         'Already have an account?',
                         style: TextStyle(color: TColor.white),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () {
                           // Navigate back to login page

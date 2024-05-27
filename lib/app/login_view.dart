@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_akhir/app/mainapp/main_view.dart';
 import 'package:flutter_application_akhir/app/signup_view.dart';
 import 'package:flutter_application_akhir/widget/round_button.dart';
 import 'package:flutter_application_akhir/widget/round_textfield.dart';
@@ -133,7 +134,9 @@ class _LoginViewState extends State<LoginView> {
                     height: media.height * 0.04,
                   ),
 
-                  RoundButton(title: "Login", onPressed: () {}),
+                  RoundButton(title: "Login", onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()) );
+                  }),
                 ],
               ),
             ),

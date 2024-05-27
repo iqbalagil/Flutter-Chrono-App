@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "258967757141",
+    "project_id": "chronoapp-1fde1",
+    "storage_bucket": "chronoapp-1fde1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258967757141:android:3d3fb99f9fede17d920fdc",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_akhir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpPTM5etQu2p1QDwQ6nqrQ1qpCoVHBPHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

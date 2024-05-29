@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -6,7 +7,7 @@ import 'package:flutter_application_akhir/common/color_common.dart';
 import 'package:flutter_application_akhir/firebase_options.dart';
 import 'package:flutter_application_akhir/app/mainapp/product_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application_akhir/app/service/auth.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  final String userName = 'Iqbal';
+  late String username;
   String selectedCategory = 'all';
 
   final firebase_storage.FirebaseStorage storage =
@@ -25,15 +26,31 @@ class _MainViewState extends State<MainView> {
   List<String> imageUrls = [];
   List<Map<String, dynamic>> products = [];
   bool isLoading = true;
+  final User? user = Auth().currentUser;
 
   @override
   void initState() {
     super.initState();
+    fetchUserName();
     initializeFirebase().then((_) {
       downloadFilesInDirectory('product_imgaes').then((_) {
         fetchImageUrls();
       });
     });
+  }
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
+ Future<void> fetchUserName() async {
+    final User? user = Auth().currentUser;
+    if (user != null) {
+      final displayName = await user.displayName;
+      setState(() {
+        username = displayName ?? '';
+      });
+    }
   }
 
   Future<void> initializeFirebase() async {
@@ -70,11 +87,9 @@ class _MainViewState extends State<MainView> {
           await storage.ref().child(directoryPath).listAll();
 
       for (final firebase_storage.Reference ref in result.items) {
-        if (ref.fullPath != null) {
+        if (ref.fullPath != true) {
           final url = await ref.getDownloadURL();
           print('Downloading file from $url');
-          // Perform the download operation here
-          // For example, you can use http package to download the file
         }
       }
     } catch (e) {
@@ -96,6 +111,8 @@ class _MainViewState extends State<MainView> {
       };
     }).toList();
 
+
+
     setState(() {
       isLoading = false;
     });
@@ -112,15 +129,18 @@ class _MainViewState extends State<MainView> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget> [
                     ListTile(
                       leading: const CircleAvatar(),
                       title: Text(
-                        'Welcome back, $userName!',
+                        'Welcome back, $username!',
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       subtitle: const Text('Explore our latest collection!'),
                     ),
+                    ElevatedButton(onPressed: signOut, child: const Text(
+                      'Sign Out'
+                    )),
                     const SizedBox(height: 30),
                     CarouselSlider(
                       items: imageUrls.map((url) {

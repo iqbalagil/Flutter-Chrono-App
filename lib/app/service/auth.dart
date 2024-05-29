@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final credential = GoogleAuthProvider.credential(idToken: '');
+
+
 
   User? get currentUser => _firebaseAuth.currentUser;
 

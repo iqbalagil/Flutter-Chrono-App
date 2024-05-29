@@ -7,6 +7,8 @@ import 'package:flutter_application_akhir/common/color_common.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_akhir/app/service/auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,10 +19,14 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   bool isPasswordVisible = false;
+  GoogleSignIn googleSignIn = GoogleSignIn();
   String? errorMessage = '';
+
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+
+
   
   Future<void> signInEmailAndPassword() async {
     try {
@@ -32,6 +38,52 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+Future<void> signInWithGoogle() async {
+  try {
+    final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser != null) {
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+      googleProvider.setCustomParameters({
+  'login_hint': 'user@example.com'
+  
+});
+       await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    }
+  } catch (e) {
+    print('Error signing in with Google: $e');
+  }
+}
+
+
+  // Future<void> signInWithFacebook() async {
+  //   try {
+  //     final LoginResult loginResult = await FacebookAuth.instance.login();
+  //     if (loginResult.status == LoginStatus.success) {
+  //       final OAuthCredential facebookAuthCredential =
+  //           FacebookAuthProvider.credential(
+  //               loginResult.accessToken.token);
+  //       await FirebaseAuth.instance
+  //           .signInWithCredential(facebookAuthCredential);
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => MainView()),
+  //       );
+  //     } else if (loginResult.status == LoginStatus.cancelled) {
+  //       // Handle user cancellation
+  //     } else {
+  //       // Handle other errors
+  //       print('Error signing in with Facebook: ${loginResult.message}');
+  //     }
+  //   } catch (e) {
+  //     print('Error signing in with Facebook: $e');
+  //   }
+  // }
 
   @override
 
@@ -142,7 +194,9 @@ class _LoginViewState extends State<LoginView> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: IconButton(
                               icon: const FaIcon(FontAwesomeIcons.google),
-                              onPressed: () {},
+                              onPressed: () {
+                                signInWithGoogle();
+                              },
                             )),
                       )
                     ],
